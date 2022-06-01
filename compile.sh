@@ -14,6 +14,7 @@ LIBZIP_VERSION="1.8.0"
 SQLITE3_YEAR="2022"
 SQLITE3_VERSION="3380500" #3.38.5
 LIBDEFLATE_VERSION="b01537448e8eaf0803e38bdba5acef1d1c8effba" #1.11
+FREETYPE_VERSION="VER-2-12-1"
 
 EXT_PTHREADS_VERSION="4.0.0"
 EXT_YAML_VERSION="2.2.2"
@@ -765,6 +766,42 @@ function build_libdeflate {
 	echo " done!"
 }
 
+function build_freetype {
+	echo -n "[freetype] downloading $FREETYPE_VERSION..."
+	git clone https://github.com/freetype/freetype.git "freetype" -b "$FREETYPE_VERSION" --depth 1 >> "$DIR/install.log" 2>&1
+	cd freetype
+  mkdir tmp
+  cd tmp
+
+  echo -n " checking..."
+  if [ "$DO_STATIC" != "yes" ]; then
+    local EXTRA_FLAGS="-DBUILD_SHARED_LIBS=ON"
+  else
+    local EXTRA_FLAGS=""
+  fi
+
+  cmake ../ \
+  -DCMAKE_INSTALL_PREFIX="$INSTALL_DIR" \
+  -DCMAKE_PREFIX_PATH="$INSTALL_DIR" \
+  -DCMAKE_INSTALL_LIBDIR=lib \
+  -DLEVELDB_BUILD_TESTS=OFF \
+  -DLEVELDB_BUILD_BENCHMARKS=OFF \
+  -DLEVELDB_SNAPPY=OFF \
+  -DLEVELDB_ZSTD=OFF \
+  -DLEVELDB_TCMALLOC=OFF \
+  -DCMAKE_BUILD_TYPE=Release \
+  $CMAKE_GLOBAL_EXTRA_FLAGS \
+  $EXTRA_FLAGS >> "$DIR/install.log" 2>&1
+	echo -n " compiling..."
+	make -j $THREADS >> "$DIR/install.log" 2>&1
+	echo -n " installing..."
+	make install >> "$DIR/install.log" 2>&1
+
+	cd ../../
+	echo " done!"
+}
+
+build_freetype
 build_zlib
 build_gmp
 build_openssl
@@ -776,9 +813,11 @@ if [ "$COMPILE_GD" == "yes" ]; then
 	build_libjpeg
 	HAS_GD="--enable-gd"
 	HAS_LIBJPEG="--with-jpeg"
+	HAS_FREETYPE="--with-freetype"
 else
 	HAS_GD=""
 	HAS_LIBJPEG=""
+	HAS_FREETYPE=""
 fi
 
 build_libxml2
@@ -930,6 +969,7 @@ RANLIB=$RANLIB CFLAGS="$CFLAGS $FLAGS_LTO" CXXFLAGS="$CXXFLAGS $FLAGS_LTO" LDFLA
 --with-zip \
 --with-libdeflate="$INSTALL_DIR" \
 $HAS_LIBJPEG \
+$HAS_FREETYPE \
 $HAS_GD \
 --with-leveldb="$INSTALL_DIR" \
 --without-readline \
