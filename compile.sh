@@ -770,28 +770,28 @@ function build_freetype {
 	echo -n "[freetype] downloading $FREETYPE_VERSION..."
 	git clone https://github.com/freetype/freetype.git "freetype" -b "$FREETYPE_VERSION" --depth 1 >> "$DIR/install.log" 2>&1
 	cd freetype
-  mkdir tmp
-  cd tmp
+	mkdir tmp
+	cd tmp
 
-  echo -n " checking..."
-  if [ "$DO_STATIC" != "yes" ]; then
-    local EXTRA_FLAGS="-DBUILD_SHARED_LIBS=ON"
-  else
-    local EXTRA_FLAGS=""
-  fi
+	echo -n " checking..."
+	if [ "$DO_STATIC" != "yes" ]; then
+		local EXTRA_FLAGS="-DBUILD_SHARED_LIBS=ON"
+	else
+		local EXTRA_FLAGS=""
+	fi
 
-  cmake ../ \
-  -DCMAKE_INSTALL_PREFIX="$INSTALL_DIR" \
-  -DCMAKE_PREFIX_PATH="$INSTALL_DIR" \
-  -DCMAKE_INSTALL_LIBDIR=lib \
-  -DLEVELDB_BUILD_TESTS=OFF \
-  -DLEVELDB_BUILD_BENCHMARKS=OFF \
-  -DLEVELDB_SNAPPY=OFF \
-  -DLEVELDB_ZSTD=OFF \
-  -DLEVELDB_TCMALLOC=OFF \
-  -DCMAKE_BUILD_TYPE=Release \
-  $CMAKE_GLOBAL_EXTRA_FLAGS \
-  $EXTRA_FLAGS >> "$DIR/install.log" 2>&1
+	cmake ../ \
+	-DCMAKE_INSTALL_PREFIX="$INSTALL_DIR" \
+	-DCMAKE_PREFIX_PATH="$INSTALL_DIR" \
+	-DCMAKE_INSTALL_LIBDIR=lib \
+	-DLEVELDB_BUILD_TESTS=OFF \
+	-DLEVELDB_BUILD_BENCHMARKS=OFF \
+	-DLEVELDB_SNAPPY=OFF \
+	-DLEVELDB_ZSTD=OFF \
+	-DLEVELDB_TCMALLOC=OFF \
+	-DCMAKE_BUILD_TYPE=Release \
+	$CMAKE_GLOBAL_EXTRA_FLAGS \
+	$EXTRA_FLAGS >> "$DIR/install.log" 2>&1
 	echo -n " compiling..."
 	make -j $THREADS >> "$DIR/install.log" 2>&1
 	echo -n " installing..."
@@ -801,7 +801,6 @@ function build_freetype {
 	echo " done!"
 }
 
-build_freetype
 build_zlib
 build_gmp
 build_openssl
@@ -811,6 +810,7 @@ build_leveldb
 if [ "$COMPILE_GD" == "yes" ]; then
 	build_libpng
 	build_libjpeg
+	build_freetype
 	HAS_GD="--enable-gd"
 	HAS_LIBJPEG="--with-jpeg"
 	HAS_FREETYPE="--with-freetype"
