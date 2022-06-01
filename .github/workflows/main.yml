@@ -95,30 +95,3 @@ jobs:
           path: |
             workspace.tar.gz
           if-no-files-found: error
-
-  windows:
-    name: Windows
-    runs-on: windows-2019
-    
-    steps:
-      - uses: actions/checkout@v2
-      
-      - name: Install tools and dependencies
-        run: choco install wget --no-progress
-        
-      - name: Compile PHP
-        run: .\windows-compile-vs.bat
-        env:
-          VS_EDITION: Enterprise
-          SOURCES_PATH: ${{ github.workspace }}\pocketmine-php-sdk
-          
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v2
-        if: always()
-        with:
-          name: Windows
-          path: |
-            php-*.zip
-            compile.log
-            windows-compile-vs.bat
-          if-no-files-found: error
