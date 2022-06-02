@@ -780,6 +780,15 @@ function build_freetype {
 		local EXTRA_FLAGS=""
 	fi
 
+  #-- Could NOT find ZLIB (missing: ZLIB_LIBRARY ZLIB_INCLUDE_DIR)
+  #-- Could NOT find PNG (missing: PNG_LIBRARY PNG_PNG_INCLUDE_DIR)
+  #-- Could NOT find ZLIB (missing: ZLIB_LIBRARY ZLIB_INCLUDE_DIR)
+  #-- Could NOT find BZip2 (missing: BZIP2_LIBRARIES BZIP2_INCLUDE_DIR)
+  #-- Could NOT find BrotliDec (missing: BROTLIDEC_INCLUDE_DIRS BROTLIDEC_LIBRARIES)
+	ZLIB_LIBRARY="$INSTALL_DIR\bin" \
+	ZLIB_INCLUDE_DIR="$INSTALL_DIR\include" \
+	PNG_LIBRARY="$INSTALL_DIR\bin" \
+	PNG_PNG_INCLUDE_DIR="$INSTALL_DIR\include" \
 	cmake ../ \
 	-DCMAKE_INSTALL_PREFIX="$INSTALL_DIR" \
 	-DCMAKE_PREFIX_PATH="$INSTALL_DIR" \
@@ -790,9 +799,7 @@ function build_freetype {
 	-DLEVELDB_ZSTD=OFF \
 	-DLEVELDB_TCMALLOC=OFF \
 	-DCMAKE_BUILD_TYPE=Release \
-	-D FT_DISABLE_ZLIB=TRUE \
 	-D FT_DISABLE_BZIP2=TRUE \
-	-D FT_DISABLE_PNG=TRUE \
 	-D FT_DISABLE_HARFBUZZ=TRUE \
 	-D FT_DISABLE_BROTLI=TRUE \
 	$CMAKE_GLOBAL_EXTRA_FLAGS \
@@ -813,9 +820,9 @@ build_curl
 build_yaml
 build_leveldb
 if [ "$COMPILE_GD" == "yes" ]; then
-	build_libpng
-	build_libjpeg
-	build_freetype
+  build_libpng
+  build_libjpeg
+  build_freetype
 	HAS_GD="--enable-gd"
 	HAS_LIBJPEG="--with-jpeg"
 	HAS_FREETYPE="--with-freetype"
