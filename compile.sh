@@ -780,11 +780,11 @@ function build_freetype {
 		local EXTRA_FLAGS=""
 	fi
 
-  #-- Could NOT find ZLIB (missing: ZLIB_LIBRARY ZLIB_INCLUDE_DIR)
-  #-- Could NOT find PNG (missing: PNG_LIBRARY PNG_PNG_INCLUDE_DIR)
-  #-- Could NOT find ZLIB (missing: ZLIB_LIBRARY ZLIB_INCLUDE_DIR)
-  #-- Could NOT find BZip2 (missing: BZIP2_LIBRARIES BZIP2_INCLUDE_DIR)
-  #-- Could NOT find BrotliDec (missing: BROTLIDEC_INCLUDE_DIRS BROTLIDEC_LIBRARIES)
+	#-- Could NOT find ZLIB (missing: ZLIB_LIBRARY ZLIB_INCLUDE_DIR)
+	#-- Could NOT find PNG (missing: PNG_LIBRARY PNG_PNG_INCLUDE_DIR)
+	#-- Could NOT find ZLIB (missing: ZLIB_LIBRARY ZLIB_INCLUDE_DIR)
+	#-- Could NOT find BZip2 (missing: BZIP2_LIBRARIES BZIP2_INCLUDE_DIR)
+	#-- Could NOT find BrotliDec (missing: BROTLIDEC_INCLUDE_DIRS BROTLIDEC_LIBRARIES)
 	ZLIB_LIBRARY="$INSTALL_DIR\bin" \
 	ZLIB_INCLUDE_DIR="$INSTALL_DIR\include" \
 	PNG_LIBRARY="$INSTALL_DIR\bin" \
@@ -820,9 +820,9 @@ build_curl
 build_yaml
 build_leveldb
 if [ "$COMPILE_GD" == "yes" ]; then
-  build_libpng
-  build_libjpeg
-  build_freetype
+	build_libpng
+	build_libjpeg
+	build_freetype
 	HAS_GD="--enable-gd"
 	HAS_LIBJPEG="--with-jpeg"
 	HAS_FREETYPE="--with-freetype"
